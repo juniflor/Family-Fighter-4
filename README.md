@@ -1,1 +1,32 @@
-# Family-Fighter-4
+# Pixel Fighter v1.0
+Local Versus fighting game (HTML5 Canvas + Vite). Fighters: Junior, Marty.
+
+## Run locally
+    npm install
+    npm run dev      # open the printed URL in Chrome
+    npm run build    # outputs dist/
+
+## Deploy to GitHub Pages
+1. Push this folder to a GitHub repo (branch `main`).
+2. Repo Settings > Pages > Source: **GitHub Actions**.
+3. Every push to `main` builds and deploys (`.github/workflows/deploy.yml`). `base` is relative, so any repo name works.
+
+## Controls
+| | P1 | P2 |
+|-|-|-|
+|Move/Jump/Crouch|A D / W / S|Arrows|
+|Light/Heavy/Special|F / G / R|Numpad 1 / 2 / 3|
+|Block|Left Shift|Numpad 0|
+
+Gamepads (auto-assigned: first pad = P1, second = P2): D-pad/stick move, A light, X heavy, Y special, B or stick-up jump, bumpers/triggers block.
+Menus: W/S or arrows + F/Enter to confirm, Esc back. In match: P pause, Esc quit. M toggles sound.
+
+## Adding a fighter
+Add an entry to `src/characters.js` (stats, colors, three moves). Sprites are drawn procedurally in `src/sprites.js` from those fields; the roster, select screen and AI pick it up automatically.
+
+## v1.1: eight fighters + controllers
+Fighters: Junior, Marty, Raphy (belly flop), Esa (green gas), Sydney (rapid fire), Sam Li (spinning kicks), Edson (wrestling slam, unblockable), Mom (electric shock).
+Stats (speed/attack/health, 1-10) live in `src/characters.js` and drive walk speed, damage and HP.
+
+Controllers: plug in or turn on pads at any time (press a button if Chrome doesn't see it). The first pad becomes P1, the second P2; unplug/replug is handled live (match auto-pauses). Keyboard always works for both players, so pad-vs-keyboard works. Back/Select swaps player slots (use it to make a single pad Player 2).
+Buttons (Xbox/PlayStation): stick or D-pad move, A/Cross light, X/Square heavy, Y/Triangle special, B/Circle or stick-up jump, stick-down crouch, bumpers/triggers block.
