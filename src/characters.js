@@ -1,0 +1,53 @@
+// Add new fighters here. moves: s=startup, a=active, r=recovery frames; y/h = hitbox offset/height from top of body.
+export const CHARACTERS = {
+  junior: { name: 'JUNIOR', hp: 100, speed: 2.1, jump: 9.5, h: 46, w: 22, leg: 17, torso: 17,
+    skin: '#f1c27d', hair: '#111118', top: '#19c9d6', topD: '#0e8f99', pants: '#1b1b24', shoes: '#eeeeee', style: 'short',
+    moves: {
+      light: { s: 4, a: 3, r: 8, dmg: 6, kb: 2.5, hs: 14, reach: 26, y: 14, h: 12, snd: 'light' },
+      heavy: { s: 10, a: 4, r: 16, dmg: 12, kb: 5, hs: 22, reach: 34, y: 24, h: 14, snd: 'heavy' },
+      special: { type: 'proj', s: 12, r: 24, dmg: 14, kb: 5, hs: 22, speed: 4.5, col: '#5ff', snd: 'special' } } },
+  marty: { name: 'MARTY', hp: 95, speed: 3, jump: 10.5, h: 54, w: 22, leg: 22, torso: 20,
+    skin: '#f1c27d', hair: '#0e0e12', top: '#f2f2f2', topD: '#b9b9c4', pants: '#d62828', shoes: '#ffffff', style: 'curly', glasses: true, skinLeg: .45,
+    moves: {
+      light: { s: 3, a: 3, r: 7, dmg: 5, kb: 2, hs: 12, reach: 28, y: 16, h: 12, snd: 'light' },
+      heavy: { s: 8, a: 4, r: 14, dmg: 10, kb: 4.5, hs: 20, reach: 36, y: 28, h: 14, snd: 'heavy' },
+      special: { s: 8, a: 14, r: 14, dmg: 15, kb: 6, hs: 22, reach: 30, y: 16, h: 18, dash: 6, snd: 'special' } } },
+};
+CHARACTERS.junior.stats = { spd: 7, atk: 7, hp: 7 };
+CHARACTERS.marty.stats = { spd: 9, atk: 6, hp: 5 };
+// Stat helper for new fighters: spd/atk/hp (1-10) drive walk speed, damage (x atk/7) and health. Move dmg below is "at attack 7".
+const mk = ([spd, atk, hp], look, moves) => { for (const m of Object.values(moves)) m.dmg = Math.max(1, Math.round(m.dmg * atk / 7));
+  return { hp: 50 + 7 * hp, speed: +(.45 + .24 * spd).toFixed(2), jump: +(8.5 + .2 * spd).toFixed(1), stats: { spd, atk, hp }, ...look, moves }; };
+Object.assign(CHARACTERS, {
+  raphy: mk([4, 8, 9], { name: 'RAPHY', h: 46, w: 30, leg: 14, torso: 20, bw: 11, lw: 8, skin: '#f1c27d', hair: '#111118', top: '#f1c27d', topD: '#d9a860',
+    pants: '#f1c27d', shoes: '#d9a860', style: 'bangs', glasses: true, hood: false, belt: '#ece4d2', dress: true, dressCol: '#ece4d2' }, {
+    light: { s: 6, a: 3, r: 10, dmg: 6, kb: 2.5, hs: 14, reach: 26, y: 16, h: 14, snd: 'light' },
+    heavy: { s: 13, a: 4, r: 20, dmg: 12, kb: 6, hs: 24, reach: 34, y: 20, h: 18, snd: 'heavy' },
+    special: { s: 10, a: 22, r: 14, dmg: 17, kb: 6, hs: 26, reach: 34, y: 14, h: 32, dash: 3.5, hop: 6, flop: true, snd: 'special' } }), // belly flop
+  esa: mk([6, 7, 7], { name: 'ESA', h: 42, w: 20, leg: 15, torso: 15, lw: 7, skin: '#f1c27d', hair: '#111118', top: '#e8a0c0', topD: '#b86a90',
+    pants: '#6f8fbf', shoes: '#ffffff', style: 'shoulder', hood: false, shortSleeve: true }, {
+    light: { s: 5, a: 3, r: 9, dmg: 5, kb: 2, hs: 13, reach: 30, y: 12, h: 12, snd: 'light' },
+    heavy: { s: 10, a: 4, r: 16, dmg: 10, kb: 4, hs: 20, reach: 36, y: 18, h: 12, snd: 'heavy' },
+    special: { type: 'proj', s: 14, r: 26, dmg: 12, kb: 3, hs: 28, speed: 2.6, col: '#5c4', size: 18, snd: 'special' } }), // green gas
+  sydney: mk([8, 7, 6], { name: 'SYDNEY', h: 48, w: 22, leg: 18, torso: 18, skin: '#f6d3b8', hair: '#6b4226', top: '#8b5a2b', topD: '#6b4220',
+    pants: '#3d6fb5', rips: true, shoes: '#222222', style: 'ponytail', hood: false }, {
+    light: { s: 3, a: 3, r: 7, dmg: 5, kb: 2, hs: 12, reach: 28, y: 16, h: 12, snd: 'light' },
+    heavy: { s: 8, a: 4, r: 14, dmg: 10, kb: 4, hs: 20, reach: 34, y: 26, h: 14, snd: 'heavy' },
+    special: { s: 6, a: 15, r: 16, dmg: 3, kb: 1.2, hs: 10, reach: 32, y: 14, h: 14, every: 3, snd: 'light' } }), // rapid fire
+  samli: mk([8, 7, 7], { name: 'SAM LI', h: 47, w: 22, leg: 18, torso: 17, skin: '#f1c27d', hair: '#111118', hl: '#9a6a3a', top: '#222228', topD: '#111116',
+    pants: '#3a6ec8', bell: true, shoes: '#eeeeee', style: 'long', glasses: true, hood: false, shortSleeve: true }, {
+    light: { s: 3, a: 3, r: 8, dmg: 5, kb: 2.2, hs: 13, reach: 28, y: 14, h: 12, snd: 'light' },
+    heavy: { s: 9, a: 4, r: 14, dmg: 11, kb: 4.5, hs: 21, reach: 38, y: 26, h: 14, snd: 'heavy' },
+    special: { s: 6, a: 20, r: 16, dmg: 4, kb: 1.5, hs: 10, reach: 40, y: 18, h: 16, every: 5, dash: 1.5, spin: true, snd: 'special' } }), // spinning multi-kick
+  edson: mk([4, 9, 9], { name: 'EDSON', h: 50, w: 26, leg: 18, torso: 20, bw: 10, lw: 7, armH: 6, skin: '#f1c27d', hair: '#111118', top: '#222228', topD: '#111116',
+    pants: '#8a8a94', skinLeg: .5, shoes: '#eeeeee', style: 'buzz', cap: '#2a4a8a', glasses: true, hood: false, shortSleeve: true }, {
+    light: { s: 6, a: 3, r: 10, dmg: 6, kb: 3, hs: 14, reach: 28, y: 16, h: 14, snd: 'light' },
+    heavy: { s: 12, a: 4, r: 18, dmg: 11, kb: 6, hs: 24, reach: 34, y: 18, h: 18, snd: 'heavy' },
+    special: { s: 10, a: 4, r: 26, dmg: 15, kb: 3.5, hs: 34, reach: 24, y: 14, h: 24, grab: true, launch: 6, snd: 'heavy' } }), // wrestling slam (unblockable grab)
+  mom: mk([6, 7, 8], { name: 'MOM', h: 40, w: 20, leg: 15, torso: 13, skin: '#7bc96f', hair: '#222222', top: '#7a5aa8', topD: '#5a3f80',
+    pants: '#6fb863', shoes: '#4a3a2a', style: 'bob', glasses: true, hood: false, dress: true, aura: true }, {
+    light: { s: 4, a: 3, r: 9, dmg: 5, kb: 2, hs: 13, reach: 26, y: 12, h: 12, snd: 'light' },
+    heavy: { s: 9, a: 4, r: 15, dmg: 10, kb: 4, hs: 20, reach: 32, y: 16, h: 14, snd: 'heavy' },
+    special: { s: 10, a: 12, r: 20, dmg: 3, kb: .8, hs: 30, reach: 58, y: 4, h: 30, every: 3, zap: true, snd: 'special' } }), // electric shock
+});
+export const ROSTER = Object.keys(CHARACTERS);
