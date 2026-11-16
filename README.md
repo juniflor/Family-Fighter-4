@@ -30,3 +30,6 @@ Stats (speed/attack/health, 1-10) live in `src/characters.js` and drive walk spe
 
 Controllers: plug in or turn on pads at any time (press a button if Chrome doesn't see it). The first pad becomes P1, the second P2; unplug/replug is handled live (match auto-pauses). Keyboard always works for both players, so pad-vs-keyboard works. Back/Select swaps player slots (use it to make a single pad Player 2).
 Buttons (Xbox/PlayStation): stick or D-pad move, A/Cross light, X/Square heavy, Y/Triangle special, B/Circle or stick-up jump, stick-down crouch, bumpers/triggers block.
+
+## Attack set
+Standing: Light = punch, Heavy = kick. Holding down: low punch and sweeping kick (low hitbox, trips the opponent, can be jumped over). In the air: flying punch and flying kick (one per jump). Variants are generated from each fighter's light/heavy in `src/characters.js` (`addVariants`).

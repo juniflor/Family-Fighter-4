@@ -121,7 +121,7 @@ function drawSelect() {
 function drawControls() {
   drawStage(c); c.fillStyle = 'rgba(0,0,0,.65)'; c.fillRect(30, 20, 420, 230); txt('CONTROLS', 240, 44, 16, '#fc3');
   ['P1: A/D move  W jump  S crouch  F light  G heavy  R special  LShift block', 'P2: Arrows move/jump/crouch  Num1 light  Num2 heavy  Num3 special  Num0 block',
-   'Gamepads auto-assign (pad1=P1, pad2=P2); Back/Select swaps; mix with keyboard', 'D-pad/stick move, A light, X heavy, Y special, B jump, bumpers block', 'P pause   M sound   Esc back', 'Win 2 of 3 rounds. 2 min per round.', '', 'Press any key / click to return']
+   'Gamepads auto-assign (pad1=P1, pad2=P2); Back/Select swaps; mix with keyboard', 'D-pad/stick move, A light, X heavy, Y special, B jump, bumpers block', 'P pause   M sound   Esc back', 'Win 2 of 3 rounds. 2 min per round.', 'Light=punch, Heavy=kick. Hold DOWN: low punch / sweep. In air: flying punch / kick', 'Press any key / click to return']
     .forEach((s, i) => txt(s, 240, 76 + i * 20, 8));
   if (hit('Escape') || hit('Enter') || hit('Space') || any('light')) go('menu');
 }

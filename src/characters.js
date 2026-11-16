@@ -50,4 +50,11 @@ Object.assign(CHARACTERS, {
     heavy: { s: 9, a: 4, r: 15, dmg: 10, kb: 4, hs: 20, reach: 32, y: 16, h: 14, snd: 'heavy' },
     special: { s: 10, a: 12, r: 20, dmg: 3, kb: .8, hs: 30, reach: 58, y: 4, h: 30, every: 3, zap: true, snd: 'special' } }), // electric shock
 });
+// Crouch (low punch / sweep) and jump (flying punch / kick) variants are derived from each fighter's light/heavy.
+function addVariants(d) { const L = d.moves.light, H = d.moves.heavy, h = d.h;
+  d.moves.clight = { ...L, s: L.s + 1, dmg: Math.max(1, Math.round(L.dmg * .9)), y: Math.round(h * .6), h: 10 };
+  d.moves.cheavy = { ...H, a: 5, r: H.r + 4, dmg: Math.max(1, Math.round(H.dmg * .9)), kb: 2, hs: 26, reach: H.reach + 6, y: h - 10, h: 10, launch: 3.5, sweep: true };
+  d.moves.jlight = { ...L, s: 3, a: 40, r: 0, air: true, y: Math.round(h * .4), h: 14 };
+  d.moves.jheavy = { ...H, s: 4, a: 40, r: 0, air: true, reach: H.reach + 4, y: Math.round(h * .55), h: 16, dmg: Math.max(1, Math.round(H.dmg * .85)) }; }
+Object.values(CHARACTERS).forEach(addVariants);
 export const ROSTER = Object.keys(CHARACTERS);

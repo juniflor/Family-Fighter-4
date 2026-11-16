@@ -2,8 +2,8 @@ import { GROUND, ATK } from './fighter.js';
 const R = (c, x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
 export function drawFighter(c, f, force) {
   const d = f.def, S = force || f.state, mv = d.moves[S];
-  const crouch = S === 'crouch' || (S === 'block' && f.crouch), legH = Math.round(d.leg * (crouch ? .55 : 1)), tH = d.torso;
-  const walk = S === 'walk' ? Math.sin(f.anim * .35) * 4 : 0, air = S === 'jump';
+  const crouch = S === 'crouch' || S === 'clight' || S === 'cheavy' || (S === 'block' && f.crouch), legH = Math.round(d.leg * (crouch ? .55 : 1)), tH = d.torso;
+  const walk = S === 'walk' ? Math.sin(f.anim * .35) * 4 : 0, air = S === 'jump' || S === 'jlight' || S === 'jheavy';
   const act = mv && f.t >= mv.s && f.t < mv.s + (mv.a || 0);
   let lean = ATK.includes(S) ? 2 : S === 'hit' ? -3 : 0, bob = S === 'idle' ? Math.round(Math.sin(f.anim * .12)) : 0;
   c.save(); c.translate(Math.round(f.x), Math.round(GROUND - f.y)); c.scale(f.facing, 1);
@@ -14,7 +14,7 @@ export function drawFighter(c, f, force) {
   if (mv && mv.spin && S === 'special' && act) c.scale(Math.floor(f.t / 4) % 2 ? -1 : 1, 1);
   if (mv && mv.flop && S === 'special' && f.t >= mv.s - 2) { const p = Math.min(1, (f.t - mv.s + 3) / 6); c.translate(0, -(d.bw || 8) * p); c.rotate(Math.PI / 2 * p); }
   const lw = d.lw || 6, bw = d.bw || 8;
-  const kick = S === 'heavy' || (S === 'special' && d.moves.special.dash && !d.moves.special.flop);
+  const kick = S === 'heavy' || S === 'cheavy' || S === 'jheavy' || (S === 'special' && d.moves.special.dash && !d.moves.special.flop);
   const lt = air ? 3 : 0, sh = d.shoes;
   const leg = (x, front) => { if (front && kick && f.t >= mv.s - 2) return; const lh = legH - (air ? 4 : 0);
     R(c, x, -lh, lw, lh, d.pants); if (d.skinLeg) R(c, x, -lh * d.skinLeg, lw, lh * d.skinLeg | 0, d.skin);
@@ -22,7 +22,7 @@ export function drawFighter(c, f, force) {
     if (d.bell) R(c, x - 1, -6, lw + 2, 6, d.pants);
     R(c, x - 1, -2, lw + 2, 2, sh); };
   leg(-1 - lw - walk * .5 + lt, 0); leg(1 + walk * .5 - lt, 1);
-  if (kick && f.t >= mv.s - 2) { const e = act ? mv.reach - 6 : 8; R(c, 3, -legH - 5, e, 6, d.pants); R(c, 3 + e, -legH - 6, 4, 8, sh); }
+  if (kick && f.t >= mv.s - 2) { const e = act ? mv.reach - 6 : 8; const ky = S === 'cheavy' ? -9 : -legH - 5; R(c, 3, ky, e, 6, d.pants); R(c, 3 + e, ky - 1, 4, 8, sh); }
   const ty = -legH - tH;
   R(c, -bw + lean, ty, bw * 2, tH, d.top); R(c, -bw + lean, ty + tH - 4, bw * 2, 4, d.topD);
   if (d.hood !== false) { R(c, -3 + lean, ty + 3, 1, 4, d.topD); R(c, 2 + lean, ty + 3, 1, 4, d.topD); }
