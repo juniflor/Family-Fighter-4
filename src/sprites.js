@@ -1,6 +1,8 @@
 import { GROUND, ATK } from './fighter.js';
+import { drawDetailed } from './detailed.js';
 const R = (c, x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
 export function drawFighter(c, f, force) {
+  if (f.def.detail) return drawDetailed(c, f, force);
   const d = f.def, S = force || f.state, mv = d.moves[S];
   const crouch = S === 'crouch' || S === 'clight' || S === 'cheavy' || (S === 'block' && f.crouch), legH = Math.round(d.leg * (crouch ? .55 : 1)), tH = d.torso;
   const walk = S === 'walk' ? Math.sin(f.anim * .35) * 4 : 0, air = S === 'jump' || S === 'jlight' || S === 'jheavy';

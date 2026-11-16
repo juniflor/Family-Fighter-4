@@ -33,3 +33,6 @@ Buttons (Xbox/PlayStation): stick or D-pad move, A/Cross light, X/Square heavy, 
 
 ## Attack set
 Standing: Light = punch, Heavy = kick. Holding down: low punch and sweeping kick (low hitbox, trips the opponent, can be jumped over). In the air: flying punch and flying kick (one per jump). Variants are generated from each fighter's light/heavy in `src/characters.js` (`addVariants`).
+
+## Detailed sprites
+Fighters with `detail: true` and a `pal` palette in `src/characters.js` use `src/detailed.js` (outlines, shading, face). Junior uses it (jointed skeleton, realistic proportions, 62px tall); other fighters still use the simpler renderer in `src/sprites.js`.

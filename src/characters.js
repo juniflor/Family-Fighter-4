@@ -1,6 +1,6 @@
 // Add new fighters here. moves: s=startup, a=active, r=recovery frames; y/h = hitbox offset/height from top of body.
 export const CHARACTERS = {
-  junior: { name: 'JUNIOR', hp: 100, speed: 2.1, jump: 9.5, h: 46, w: 22, leg: 17, torso: 17,
+  junior: { name: 'JUNIOR', hp: 100, speed: 2.1, jump: 9.5, h: 62, w: 22, leg: 32, torso: 18,
     skin: '#f1c27d', hair: '#111118', top: '#19c9d6', topD: '#0e8f99', pants: '#1b1b24', shoes: '#eeeeee', style: 'short',
     moves: {
       light: { s: 4, a: 3, r: 8, dmg: 6, kb: 2.5, hs: 14, reach: 26, y: 14, h: 12, snd: 'light' },
@@ -57,4 +57,7 @@ function addVariants(d) { const L = d.moves.light, H = d.moves.heavy, h = d.h;
   d.moves.jlight = { ...L, s: 3, a: 40, r: 0, air: true, y: Math.round(h * .4), h: 14 };
   d.moves.jheavy = { ...H, s: 4, a: 40, r: 0, air: true, reach: H.reach + 4, y: Math.round(h * .55), h: 16, dmg: Math.max(1, Math.round(H.dmg * .85)) }; }
 Object.values(CHARACTERS).forEach(addVariants);
+// Detailed sprite palette (see src/detailed.js). Gameplay stats are unchanged.
+Object.assign(CHARACTERS.junior, { detail: true, pal: { ol: '#0b0b16', skin: '#f1c27d', skinS: '#d9a05e', hair: '#14141c', hairH: '#33406a', hood: '#2fd3e6', hoodL: '#8ff4ff', hoodD: '#1c9fb5', hoodDD: '#126f84',
+  jean: '#1d1d28', jeanH: '#3a3a52', jeanD: '#101018', red: '#d92b2b', redD: '#8f1414', blk: '#15151b', sole: '#f2f2f2', white: '#ffffff', eye: '#15151c', mouth: '#7a2e24' } });
 export const ROSTER = Object.keys(CHARACTERS);
