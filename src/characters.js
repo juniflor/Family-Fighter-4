@@ -19,7 +19,7 @@ CHARACTERS.marty.stats = { spd: 9, atk: 6, hp: 5 };
 const mk = ([spd, atk, hp], look, moves) => { for (const m of Object.values(moves)) m.dmg = Math.max(1, Math.round(m.dmg * atk / 7));
   return { hp: 50 + 7 * hp, speed: +(.45 + .24 * spd).toFixed(2), jump: +(8.5 + .2 * spd).toFixed(1), stats: { spd, atk, hp }, ...look, moves }; };
 Object.assign(CHARACTERS, {
-  raphy: mk([4, 8, 9], { name: 'RAPHY', h: 46, w: 30, leg: 14, torso: 20, bw: 11, lw: 8, skin: '#f1c27d', hair: '#111118', top: '#f1c27d', topD: '#d9a860',
+  raphy: mk([4, 8, 9], { name: 'RAPHY', h: 62, w: 30, leg: 14, torso: 20, bw: 11, lw: 8, skin: '#f1c27d', hair: '#111118', top: '#f1c27d', topD: '#d9a860',
     pants: '#f1c27d', shoes: '#d9a860', style: 'bangs', glasses: true, hood: false, belt: '#ece4d2', dress: true, dressCol: '#ece4d2' }, {
     light: { s: 6, a: 3, r: 10, dmg: 6, kb: 2.5, hs: 14, reach: 26, y: 16, h: 14, snd: 'light' },
     heavy: { s: 13, a: 4, r: 20, dmg: 12, kb: 6, hs: 24, reach: 34, y: 20, h: 18, snd: 'heavy' },
@@ -63,4 +63,7 @@ Object.assign(CHARACTERS.junior, { detail: true, pal: { ol: '#0b0b16', skin: '#f
 Object.assign(CHARACTERS.marty, { detail: true, body: { leg: 17, arm: 13, torso: 20 }, pal: { ol: '#0b0b16', skin: '#cf9660', skinS: '#a8703f', hair: '#0e0e12', hairH: '#3a3a4a', curly: true, glasses: true,
   frame: '#1a1a22', lens: '#dfe8f0', hood: '#e6eaf2', hoodL: '#ffffff', hoodD: '#aab4c6', hoodDD: '#7f8aa0', emblem: '#d62828', shorts: '#d62828', shortsD: '#8f1616', jeanH: '#fff', jeanD: '#fff',
   red: '#b8a58c', redD: '#8a7a66', blk: '#8a7a66', sole: '#ece5d6', white: '#f4f0e6', eye: '#15151c', mouth: '#7a3a2a' } });
+Object.assign(CHARACTERS.raphy, { detail: true, body: { leg: 14, arm: 11, torso: 20, w: 1.45 }, pal: { lowGuard: true, ol: '#0b0b16', skin: '#ec9d62', skinS: '#c97a48', skinH: '#f6b27a', hair: '#17121f', hairH: '#3c3456',
+  bare: true, bangs: true, chubby: true, smile: true, belly: true, barefoot: true, skinLegs: true, hood: '#ec9d62', hoodD: '#d8844f', hoodL: '#f6b27a', hoodDD: '#a85f35',
+  wrap: '#4a4a9a', wrapL: '#6e6ec8', wrapD: '#2f2f6a', jean: '#ec9d62', jeanH: '#f6b27a', jeanD: '#d8844f', white: '#ffffff', eye: '#15151c', mouth: '#6a2a20', red: '#ec9d62', redD: '#c97a48', blk: '#c97a48', sole: '#c97a48' } });
 export const ROSTER = Object.keys(CHARACTERS);
