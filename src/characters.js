@@ -6,8 +6,8 @@ export const CHARACTERS = {
       light: { s: 4, a: 3, r: 8, dmg: 6, kb: 2.5, hs: 14, reach: 26, y: 14, h: 12, snd: 'light' },
       heavy: { s: 10, a: 4, r: 16, dmg: 12, kb: 5, hs: 22, reach: 34, y: 24, h: 14, snd: 'heavy' },
       special: { type: 'proj', s: 12, r: 24, dmg: 14, kb: 5, hs: 22, speed: 4.5, col: '#5ff', snd: 'special' } } },
-  marty: { name: 'MARTY', hp: 95, speed: 3, jump: 10.5, h: 54, w: 22, leg: 22, torso: 20,
-    skin: '#f1c27d', hair: '#0e0e12', top: '#f2f2f2', topD: '#b9b9c4', pants: '#d62828', shoes: '#ffffff', style: 'curly', glasses: true, skinLeg: .45,
+  marty: { name: 'MARTY', hp: 95, speed: 3, jump: 10.5, h: 68, w: 22, leg: 34, torso: 20,
+    skin: '#cf9660', hair: '#0e0e12', top: '#f2f2f2', topD: '#b9b9c4', pants: '#d62828', shoes: '#ffffff', style: 'curly', glasses: true, skinLeg: .45,
     moves: {
       light: { s: 3, a: 3, r: 7, dmg: 5, kb: 2, hs: 12, reach: 28, y: 16, h: 12, snd: 'light' },
       heavy: { s: 8, a: 4, r: 14, dmg: 10, kb: 4.5, hs: 20, reach: 36, y: 28, h: 14, snd: 'heavy' },
@@ -60,4 +60,7 @@ Object.values(CHARACTERS).forEach(addVariants);
 // Detailed sprite palette (see src/detailed.js). Gameplay stats are unchanged.
 Object.assign(CHARACTERS.junior, { detail: true, pal: { ol: '#0b0b16', skin: '#f1c27d', skinS: '#d9a05e', hair: '#14141c', hairH: '#33406a', hood: '#2fd3e6', hoodL: '#8ff4ff', hoodD: '#1c9fb5', hoodDD: '#126f84',
   jean: '#1d1d28', jeanH: '#3a3a52', jeanD: '#101018', red: '#d92b2b', redD: '#8f1414', blk: '#15151b', sole: '#f2f2f2', white: '#ffffff', eye: '#15151c', mouth: '#7a2e24' } });
+Object.assign(CHARACTERS.marty, { detail: true, body: { leg: 17, arm: 13, torso: 20 }, pal: { ol: '#0b0b16', skin: '#cf9660', skinS: '#a8703f', hair: '#0e0e12', hairH: '#3a3a4a', curly: true, glasses: true,
+  frame: '#1a1a22', lens: '#dfe8f0', hood: '#e6eaf2', hoodL: '#ffffff', hoodD: '#aab4c6', hoodDD: '#7f8aa0', emblem: '#d62828', shorts: '#d62828', shortsD: '#8f1616', jeanH: '#fff', jeanD: '#fff',
+  red: '#b8a58c', redD: '#8a7a66', blk: '#8a7a66', sole: '#ece5d6', white: '#f4f0e6', eye: '#15151c', mouth: '#7a3a2a' } });
 export const ROSTER = Object.keys(CHARACTERS);
