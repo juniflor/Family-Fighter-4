@@ -9,6 +9,8 @@ addEventListener('keydown', e => { if (!e.repeat) hits.add(e.code); down.add(e.c
 addEventListener('keyup', e => down.delete(e.code));
 addEventListener('blur', () => down.clear());
 export const hit = c => hits.has(c);          // key pressed this frame (menus)
+export const pushHit = c => hits.add(c);      // lets on-screen buttons fake a key press (e.g. Escape)
+export const touch = {};                      // on-screen button states (action -> bool), merged into player slot 0
 
 // ---- gamepad slot management ----
 const slots = [null, null], names = ['', ''], mem = {}, events = [], swapPrev = {};
@@ -35,7 +37,9 @@ export function poll() {
     if (b8 && !swapPrev[g.index] && slots.includes(g.index)) { [slots[0], slots[1]] = [slots[1], slots[0]]; [names[0], names[1]] = [names[1], names[0]]; ev('on', 'Controller slots swapped'); }
     swapPrev[g.index] = b8; }
   for (let p = 0; p < 2; p++) { prev[p] = cur[p]; const s = {}; for (const a of ACTIONS) s[a] = down.has(KEYS[p][a]);
-    const g = slots[p] !== null ? list[slots[p]] : null; if (g) readPad(g, s); cur[p] = s; }
+    const g = slots[p] !== null ? list[slots[p]] : null; if (g) readPad(g, s);
+    if (p === 0) for (const a of ACTIONS) if (touch[a]) s[a] = true;
+    cur[p] = s; }
 }
 export const padCount = () => slots.filter(s => s !== null).length;
 export const padStatus = () => `P1: ${names[0] ? names[0].toUpperCase() + ' + KEYS' : 'KEYBOARD'}   P2: ${names[1] ? names[1].toUpperCase() + ' + KEYS' : 'KEYBOARD'}`;
