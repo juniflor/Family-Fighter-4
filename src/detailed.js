@@ -17,7 +17,7 @@ export function drawDetailed(c, f, force) {
   const flopS = mv && mv.flop && S === 'special';
   const act = mv && t >= mv.s && t < mv.s + (mv.a || 0), rf = atk && S !== 'special' ? .5 : .8;   // normals retract twice as fast
   // e: 0 = guard, 1 = fully extended. Quick wind-up (pull back / chamber), snap to full on active frames, fast retract.
-  const e = !mv ? 0 : act ? 1 : t < mv.s ? (kickS ? .35 : -.2) * t / mv.s : mv.r ? Math.max(0, 1 - (t - mv.s - (mv.a || 0)) / (mv.r * rf)) : 0;
+  const e = !mv ? 0 : act ? (mv.every && (t / 3 | 0) % 2 ? .55 : 1) : t < mv.s ? (kickS ? .35 : -.2) * t / mv.s : mv.r ? Math.max(0, 1 - (t - mv.s - (mv.a || 0)) / (mv.r * rf)) : 0;
   const ph = f.anim * .3, sn = Math.sin(ph), lerp = (a, b, q) => [a[0] + (b[0] - a[0]) * q, a[1] + (b[1] - a[1]) * q];
   let hip = [0, H0], lean = 2, aF = [10 * k, -5], aB = [-10 * k, -5], tilt = 0;
   if (S === 'idle') hip[1] += Math.round(Math.sin(f.anim * .12));
@@ -47,24 +47,35 @@ export function drawDetailed(c, f, force) {
     const r = (x, y, w, h, k) => R(c, x, y, w, h, ol ? P.ol : P[k]);
     const limb = (p, q, w, k) => { const dx = q[0] - p[0], dy = q[1] - p[1], n = Math.max(1, Math.ceil(Math.max(Math.abs(dx), Math.abs(dy))));
       for (let i = 0; i <= n; i++) R(c, Math.round(p[0] + dx * i / n - w / 2), Math.round(p[1] + dy * i / n - w / 2), w, w, ol ? P.ol : P[k]); };
+    const taper = (p, q, w0, w1, k) => { const dx = q[0] - p[0], dy = q[1] - p[1], n = Math.max(1, Math.ceil(Math.max(Math.abs(dx), Math.abs(dy))));
+      for (let i = 0; i <= n; i++) { const w = Math.round(w0 + (w1 - w0) * i / n); R(c, Math.round(p[0] + dx * i / n - w / 2), Math.round(p[1] + dy * i / n - 2), w, 4, ol ? P.ol : P[k]); } };
     const shoe = (a, kick) => { const [x, y] = a.map(Math.round);
       if (P.barefoot) { if (kick) r(x - 2, y - 4, 5, 8, 'skin'); else { r(x - 3, y + 1, 10, 4, 'skin'); r(x + 5, y + 3, 3, 2, 'skinS'); r(x - 3, y + 4, 10, 1, 'skinS'); } return; }
       if (kick) { r(x - 2, y - 4, 5, 8, 'red'); r(x + 3, y - 4, 1, 8, 'sole'); r(x + 1, y - 4, 2, 3, 'blk'); }
       else { r(x - 2, y - 3, 5, 4, 'red'); r(x - 2, y - 3, 5, 1, 'blk'); r(x - 3, y + 1, 10, 3, 'red'); r(x + 4, y + 1, 3, 3, 'blk'); r(x - 3, y + 4, 10, 1, 'sole'); r(x, y - 1, 2, 1, 'white'); } };
-    const leg = (g, kick) => { const lc = P.shorts || P.skinLegs ? 'skin' : 'jean'; limb(hip, g.j, w6, lc); limb(g.j, g.e, w5, lc); if (P.skinLegs && !ol) { r(g.j[0] - 1, g.j[1] - 2, 4, 4, 'skinH'); limb([hip[0] + 2, hip[1] + 3], [g.j[0] + 2, g.j[1] - 3], 2, 'skinH'); }
-      if (P.shorts) { const q = lerp(hip, g.j, .8); limb(hip, q, w9, 'shorts'); if (!ol) { r(q[0] - 4, q[1], 9, 1, 'white'); r(q[0] - 4, q[1] - 2, 1, 2, 'shortsD'); } } else if (!ol && !P.skinLegs) { limb([hip[0] + 2, hip[1] + 2], [g.j[0] + 2, g.j[1]], 1, 'jeanH'); r(g.j[0] - 2, g.j[1], 5, 1, 'jeanD'); } shoe(g.e, kick); };
-    const arm = (g, k) => { limb([sx, sy], g.j, w5, k); limb(g.j, g.e, w4, k); if (!ol && !P.bare) limb(lerp(g.j, g.e, .7), g.e, 4, 'hoodDD');
+    const leg = (g, kick) => { const lc = P.shorts || P.skinLegs || P.skirt ? 'skin' : 'jean'; limb(hip, g.j, w6, lc); if (!P.flare) limb(g.j, g.e, w5, lc); if (P.skinLegs && !ol) { r(g.j[0] - 1, g.j[1] - 2, 4, 4, 'skinH'); limb([hip[0] + 2, hip[1] + 3], [g.j[0] + 2, g.j[1] - 3], 2, 'skinH'); }
+      if (P.shorts) { const q = lerp(hip, g.j, .8); limb(hip, q, w9, 'shorts'); if (!ol) { r(q[0] - 4, q[1], 9, 1, 'white'); r(q[0] - 4, q[1] - 2, 1, 2, 'shortsD'); } } else if (!ol && !P.skinLegs && !P.skirt) { limb([hip[0] + 2, hip[1] + 2], [g.j[0] + 2, g.j[1]], 1, 'jeanH'); r(g.j[0] - 2, g.j[1], 5, 1, 'jeanD'); } if (P.skirt) { shoe(g.e, kick); const hem = lerp(hip, g.e, .8); limb(hip, g.j, w6 + 1, 'hood'); limb(g.j, hem, w6, 'hood'); taper(hip, hem, 9, 12, 'hood');
+        if (!ol) { taper([hip[0] - 1, hip[1] + 2], [hem[0] - 2, hem[1]], 1, 2, 'hoodD'); taper([hip[0] + 2, hip[1] + 2], [hem[0] + 3, hem[1]], 1, 2, 'hoodL'); r(hem[0] - 6, hem[1] + 1, 12, 1, 'hoodDD'); } }
+      else if (P.flare) { shoe(g.e, kick); taper(g.j, [g.e[0] - 1, g.e[1] + 1], 6, 13, 'jean'); if (!ol) { taper([g.j[0] + 2, g.j[1] + 2], [g.e[0] + 3, g.e[1] - 1], 1, 3, 'jeanH'); r(g.e[0] - 7, g.e[1] + 1, 13, 1, 'jeanD'); } } else shoe(g.e, kick); };
+    const arm = (g, k, sk) => { if (P.puff) limb([sx, sy - 1], [sx, sy - 1], w5 + 3, k); if (P.shortSleeve) { limb([sx, sy], g.j, w5, sk); limb(g.j, g.e, w4, sk); limb([sx, sy], lerp([sx, sy], g.j, .45), w5 + 1, k); }
+      else { limb([sx, sy], g.j, w5, k); limb(g.j, g.e, w4, k); if (!ol && !P.bare) limb(lerp(g.j, g.e, .7), g.e, 4, 'hoodDD'); }
       r(g.e[0] - fs / 2, g.e[1] - fs / 2, fs, fs, 'skin'); if (!ol) { r(g.e[0] - fs / 2, g.e[1], fs, 1, 'skinS'); } };
-    if (!P.bare) r(nx - 9, ny - 3, 6, 6, 'hoodD');                              // hood bunched behind the neck
-    arm(armB, 'hoodD'); leg(legB, false); leg(legF, kicking);
-    limb([hip[0], hip[1] + 2], [hip[0], hip[1] + 5], w12, P.wrap ? 'wrap' : P.shorts ? 'shorts' : 'jean');   // pelvis
-    limb([hip[0], hip[1] - 2], [nx, ny + (P.bare ? Math.round(w12 / 2) - 2 : 2)], w12, 'hood');           // torso
+    if (P.wavy) { const bx = nx - 4 + tilt, by = ny - 10; r(bx - 5, by + 1, 9, 26, 'hair'); r(bx - 7, by + 6, 3, 7, 'hair'); r(bx - 6, by + 15, 3, 8, 'hair'); r(bx - 4, by + 24, 5, 4, 'hair'); r(bx - 8, by + 19, 3, 5, 'hair');
+      if (!ol) { r(bx - 3, by + 4, 1, 9, 'hairH'); r(bx - 5, by + 15, 1, 6, 'hairH'); r(bx - 1, by + 14, 1, 9, 'hairH'); r(bx - 7, by + 8, 1, 3, 'hairH'); } }
+    if (!P.bare && !P.noHoodie) r(nx - 9, ny - 3, 6, 6, 'hoodD');                              // hood bunched behind the neck
+    arm(armB, 'hoodD', 'skinS'); leg(legB, false); leg(legF, kicking);
+    limb([hip[0], hip[1] + 2], [hip[0], hip[1] + 5], w12, P.wrap ? 'wrap' : P.shorts ? 'shorts' : P.skirt ? 'hood' : 'jean');   // pelvis
+    limb([hip[0], hip[1] - 2], [nx, ny + (P.bare || P.noHoodie ? Math.round(w12 / 2) - 2 : 2)], w12, 'hood');           // torso
     if (P.belly) { r(nx + 8, ny + 8, 6, 11, 'hood'); if (!ol) { r(nx + 11, ny + 12, 2, 1, 'hoodDD'); r(nx + 2, ny + 6, 8, 1, 'hoodD'); r(nx + 9, ny + 18, 5, 1, 'hoodD'); } }
     if (!ol) { limb([hip[0] - 4, hip[1] - 2], [nx - 4, ny + 2], 4, 'hoodD'); limb([hip[0] + 3, hip[1] - 4], [nx + 3, ny + 5], 2, 'hoodL');
-      if (!P.bare) { r(hip[0] - 6, hip[1] - 1, 12, 3, 'hoodD'); r(hip[0] - 4 + lean * .3, hip[1] - 9, 9, 6, 'hoodD'); r(hip[0] - 4 + lean * .3, hip[1] - 9, 9, 1, 'hoodDD');
+      if (!P.bare && !P.noHoodie) { r(hip[0] - 6, hip[1] - 1, 12, 3, 'hoodD'); r(hip[0] - 4 + lean * .3, hip[1] - 9, 9, 6, 'hoodD'); r(hip[0] - 4 + lean * .3, hip[1] - 9, 9, 1, 'hoodDD');
       const sk = P.emblem ? 'hoodD' : 'white'; r(nx - 1, ny + 4, 1, 6, sk); r(nx + 3, ny + 4, 1, 6, sk); if (P.emblem) r(nx, ny + 6, 5, 5, 'emblem'); } }
     if (P.wrap) { const hw = Math.round(w12 / 2) + 1; r(hip[0] - hw, hip[1] - 6, hw * 2, 7, 'wrap'); r(hip[0] - hw - 2, hip[1] - 6, 3, 6, 'wrap');
       if (!ol) { r(hip[0] - hw, hip[1] - 6, hw * 2, 1, 'wrapL'); r(hip[0] - hw, hip[1], hw * 2, 1, 'wrapD'); } r(hip[0] - 2, hip[1] + 1, 10, 9, 'wrap'); r(hip[0] - 1, hip[1] + 10, 8, 3, 'wrap'); if (!ol) r(hip[0] - 2, hip[1] + 1, 10, 1, 'wrapD'); }
+    if (P.belt) { r(hip[0] - 6, hip[1] - 4, 12, 3, 'hoodD'); r(hip[0], hip[1] - 5, 4, 5, 'hoodL'); r(hip[0] + 1, hip[1] - 4, 2, 3, 'hoodDD'); }
+    if (P.highWaist) { limb([hip[0], hip[1] + 1], [hip[0], hip[1] + 3], w12, 'jean'); if (!ol) { r(hip[0] - Math.round(w12 / 2), hip[1] - 5, w12, 2, 'jeanD'); r(hip[0] + 1, hip[1] - 4, 2, 1, 'white'); } }
+    if (P.shoulders) { r(nx - 5, ny - 1, 11, 4, 'skin'); if (!ol) r(nx - 1, ny + 3, 5, 1, 'skinS'); }
+    if (P.wavy) { r(nx + 3, ny + 2, 3, 14, 'hair'); if (!ol) { r(nx + 4, ny + 4, 1, 9, 'hairH'); r(nx + 3, ny + 13, 1, 2, 'hairH'); } }
     const hx = nx - 4 + tilt, hy = ny - 10;                         // head
     r(hx, hy, 10, 10, 'skin'); if (P.chubby) r(hx - 1, hy + 5, 12, 6, 'skin'); if (!ol) { if (P.chubby) r(hx, hy + 10, 11, 2, 'hoodDD'); r(hx, hy + 8, 10, 2, 'skinS'); r(hx + 1, hy + 4, 2, 3, 'skinS'); r(hx + 10, hy + 6, 1, 2, 'skin');
       if (hurt) { r(hx + 5, hy + 5, 4, 1, 'eye'); r(hx + 5, hy + 2, 5, 1, 'hair'); } else { r(hx + 5, hy + 4, 4, 3, 'white'); r(hx + 7, hy + 4, 2, 3, 'eye'); r(hx + 5, hy + 2, 5, 1, 'hair'); r(hx + 8, hy + 3, 2, 1, 'hair'); }
@@ -73,15 +84,21 @@ export function drawDetailed(c, f, force) {
     if (P.curly) { r(hx - 3, hy - 7, 16, 10, 'hair'); r(hx - 4, hy - 3, 3, 9, 'hair'); r(hx - 1, hy - 9, 4, 3, 'hair'); r(hx + 4, hy - 10, 4, 3, 'hair'); r(hx + 9, hy - 8, 4, 3, 'hair'); r(hx + 11, hy - 4, 2, 4, 'hair'); r(hx + 2, hy - 2, 8, 3, 'hair'); r(hx - 3, hy + 5, 3, 5, 'hair');
       if (!ol) { r(hx + 1, hy - 7, 3, 1, 'hairH'); r(hx + 6, hy - 8, 3, 1, 'hairH'); r(hx - 2, hy - 3, 2, 1, 'hairH'); r(hx + 10, hy - 6, 2, 1, 'hairH'); } } else if (P.bangs) {
       r(hx - 2, hy - 5, 14, 8, 'hair'); r(hx + 1, hy - 7, 8, 3, 'hair'); r(hx + 4, hy - 2, 8, 4, 'hair'); r(hx - 2, hy + 1, 3, 7, 'hair'); r(hx - 2, hy + 6, 2, 3, 'hair');
-      if (!ol) { r(hx + 2, hy - 5, 6, 1, 'hairH'); r(hx + 6, hy - 1, 4, 1, 'hairH'); r(hx - 1, hy + 2, 1, 3, 'hairH'); } } else {
+      if (!ol) { r(hx + 2, hy - 5, 6, 1, 'hairH'); r(hx + 6, hy - 1, 4, 1, 'hairH'); r(hx - 1, hy + 2, 1, 3, 'hairH'); } } else if (P.wavy) {
+      r(hx - 2, hy - 4, 13, 8, 'hair'); r(hx + 3, hy - 6, 7, 3, 'hair'); r(hx + 8, hy - 1, 3, 7, 'hair'); r(hx - 2, hy + 2, 3, 8, 'hair');
+      if (!ol) { r(hx + 1, hy - 4, 5, 1, 'hairH'); r(hx + 6, hy - 5, 3, 1, 'hairH'); r(hx + 9, hy + 1, 1, 4, 'hairH'); r(hx - 1, hy + 3, 1, 5, 'hairH'); } } else if (P.bob) {
+      r(hx - 2, hy - 4, 14, 6, 'hair'); r(hx - 4, hy, 5, 13, 'hair'); r(hx + 10, hy + 1, 2, 8, 'hair'); r(hx + 2, hy - 5, 7, 2, 'hair');
+      if (!ol) { r(hx + 3, hy - 4, 6, 1, 'hairH'); r(hx - 3, hy + 3, 1, 8, 'hairH'); r(hx + 10, hy + 2, 1, 4, 'hairH'); } } else {
     r(hx - 1, hy - 3, 12, 5, 'hair'); r(hx + 2, hy - 5, 7, 3, 'hair'); r(hx + 7, hy - 4, 4, 3, 'hair'); r(hx + 5, hy - 1, 6, 3, 'hair'); r(hx - 1, hy, 3, 5, 'hair'); r(hx - 1, hy + 4, 2, 3, 'hair');
     if (!ol) { r(hx + 3, hy - 5, 4, 1, 'hairH'); r(hx + 8, hy - 4, 2, 1, 'hairH'); r(hx + 1, hy - 2, 7, 1, 'hairH'); } }
-    if (P.bare) r(nx - 3, ny - 1, 9, 3, 'hood'); else { r(nx - 6, ny, 12, 2, 'hoodD'); if (!ol) r(nx - 6, ny, 12, 1, 'hoodDD'); }   // collar / neck
-    arm(armF, 'hood');
+    if (P.bare || P.noHoodie) r(nx - 3, ny - 1, 9, 3, P.neckKey || 'hood'); else { r(nx - 6, ny, 12, 2, 'hoodD'); if (!ol) r(nx - 6, ny, 12, 1, 'hoodDD'); }   // collar / neck
+    arm(armF, 'hood', 'skin');
   };
   c.save(); c.translate(Math.round(f.x), Math.round(GROUND - f.y)); c.scale(f.facing, 1);
   if (S === 'lose') { const p = Math.min(1, t / 20); c.translate(-8 * p, -8 * p); c.rotate(-Math.PI / 2 * p); }
   if (flopS && t >= mv.s - 2) { const p = Math.min(1, (t - mv.s + 3) / 6); c.translate(0, -10 * p); c.rotate(Math.PI / 2 * p); }
   for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) { c.save(); c.translate(dx, dy); paint(true); c.restore(); }
-  paint(false); c.restore();
+  paint(false);
+  if (mv && mv.zap && act) for (let q = 12; q < mv.reach + 14; q += 6) { const zy = Math.round(sy) + 3 + ((q / 6) % 2 ? -4 : 3); R(c, sx + q, zy, 6, 3, '#ffe94a'); R(c, sx + q, zy + 1, 3, 1, '#ffffff'); }
+  c.restore();
 }

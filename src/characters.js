@@ -29,7 +29,7 @@ Object.assign(CHARACTERS, {
     light: { s: 5, a: 3, r: 9, dmg: 5, kb: 2, hs: 13, reach: 30, y: 12, h: 12, snd: 'light' },
     heavy: { s: 10, a: 4, r: 16, dmg: 10, kb: 4, hs: 20, reach: 36, y: 18, h: 12, snd: 'heavy' },
     special: { type: 'proj', s: 14, r: 26, dmg: 12, kb: 3, hs: 28, speed: 2.6, col: '#5c4', size: 18, snd: 'special' } }), // green gas
-  sydney: mk([8, 7, 6], { name: 'SYDNEY', h: 48, w: 22, leg: 18, torso: 18, skin: '#f6d3b8', hair: '#6b4226', top: '#8b5a2b', topD: '#6b4220',
+  sydney: mk([8, 7, 6], { name: 'SYDNEY', h: 66, w: 22, leg: 18, torso: 18, skin: '#d49a6a', hair: '#6b4226', top: '#8b5a2b', topD: '#6b4220',
     pants: '#3d6fb5', rips: true, shoes: '#222222', style: 'ponytail', hood: false }, {
     light: { s: 3, a: 3, r: 7, dmg: 5, kb: 2, hs: 12, reach: 28, y: 16, h: 12, snd: 'light' },
     heavy: { s: 8, a: 4, r: 14, dmg: 10, kb: 4, hs: 20, reach: 34, y: 26, h: 14, snd: 'heavy' },
@@ -44,7 +44,7 @@ Object.assign(CHARACTERS, {
     light: { s: 6, a: 3, r: 10, dmg: 6, kb: 3, hs: 14, reach: 28, y: 16, h: 14, snd: 'light' },
     heavy: { s: 12, a: 4, r: 18, dmg: 11, kb: 6, hs: 24, reach: 34, y: 18, h: 18, snd: 'heavy' },
     special: { s: 10, a: 4, r: 26, dmg: 15, kb: 3.5, hs: 34, reach: 24, y: 14, h: 24, grab: true, launch: 6, snd: 'heavy' } }), // wrestling slam (unblockable grab)
-  mom: mk([6, 7, 8], { name: 'MOM', h: 40, w: 20, leg: 15, torso: 13, skin: '#7bc96f', hair: '#222222', top: '#7a5aa8', topD: '#5a3f80',
+  mom: mk([6, 7, 8], { name: 'MOM', h: 58, w: 20, leg: 15, torso: 13, skin: '#d9a07a', hair: '#3a2a24', top: '#7a5aa8', topD: '#5a3f80',
     pants: '#6fb863', shoes: '#4a3a2a', style: 'bob', glasses: true, hood: false, dress: true, aura: true }, {
     light: { s: 4, a: 3, r: 9, dmg: 5, kb: 2, hs: 13, reach: 26, y: 12, h: 12, snd: 'light' },
     heavy: { s: 9, a: 4, r: 15, dmg: 10, kb: 4, hs: 20, reach: 32, y: 16, h: 14, snd: 'heavy' },
@@ -66,4 +66,11 @@ Object.assign(CHARACTERS.marty, { detail: true, body: { leg: 17, arm: 13, torso:
 Object.assign(CHARACTERS.raphy, { detail: true, body: { leg: 14, arm: 11, torso: 20, w: 1.45 }, pal: { lowGuard: true, ol: '#0b0b16', skin: '#ec9d62', skinS: '#c97a48', skinH: '#f6b27a', hair: '#17121f', hairH: '#3c3456',
   bare: true, bangs: true, chubby: true, smile: true, belly: true, barefoot: true, skinLegs: true, hood: '#ec9d62', hoodD: '#d8844f', hoodL: '#f6b27a', hoodDD: '#a85f35',
   wrap: '#4a4a9a', wrapL: '#6e6ec8', wrapD: '#2f2f6a', jean: '#ec9d62', jeanH: '#f6b27a', jeanD: '#d8844f', white: '#ffffff', eye: '#15151c', mouth: '#6a2a20', red: '#ec9d62', redD: '#c97a48', blk: '#c97a48', sole: '#c97a48' } });
+Object.assign(CHARACTERS.sydney, { detail: true, body: { leg: 16, arm: 12, torso: 21, w: .9 }, pal: { ol: '#0b0b16', skin: '#d49a6a', skinS: '#ab6f45', hair: '#845631', hairH: '#c9975a',
+  noHoodie: true, neckKey: 'skin', shoulders: true, wavy: true, shortSleeve: true, highWaist: true, flare: true,
+  hood: '#46210f', hoodL: '#6a3a24', hoodD: '#2e140a', hoodDD: '#1c0c06', jean: '#5b79ad', jeanH: '#86a2d6', jeanD: '#3d5688',
+  red: '#ece7de', blk: '#b9b1a4', sole: '#ffffff', white: '#ffffff', eye: '#15151c', mouth: '#b0554f' } });
+Object.assign(CHARACTERS.mom, { detail: true, body: { leg: 14, arm: 11, torso: 19, w: .9 }, pal: { ol: '#0b0b16', skin: '#d9a07a', skinS: '#b87a58', hair: '#3a2a24', hairH: '#6a4c40',
+  lowGuard: true, noHoodie: true, neckKey: 'hood', skirt: true, puff: true, belt: true, bob: true, smile: true,
+  hood: '#7a1f3d', hoodL: '#9d3558', hoodD: '#551229', hoodDD: '#3a0c1c', red: '#241a1a', blk: '#14100f', sole: '#14100f', white: '#f4eee8', eye: '#15151c', mouth: '#b83a4a' } });
 export const ROSTER = Object.keys(CHARACTERS);
