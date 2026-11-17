@@ -36,3 +36,12 @@ Standing: Light = punch, Heavy = kick. Holding down: low punch and sweeping kick
 
 ## Detailed sprites
 Fighters with `detail: true` and a `pal` palette in `src/characters.js` use `src/detailed.js` (outlines, shading, face). Junior (62px), Marty (68px), Sydney (66px, flared jeans), Mom (58px, flared dress skirt) and Raphy (62px, bare-chested sumo with belly flop pose) use it (jointed skeletons, realistic proportions; per-fighter `body` sizes); other fighters still use the simpler renderer in `src/sprites.js`.
+
+## v1.2: online play (peer-to-peer)
+Main menu > **PLAY ONLINE**. One player picks **HOST GAME** and gets a 4-letter room code (click the lobby screen to copy an invite link of the form `https://<you>.github.io/<repo>/?room=CODE`). The other player opens that link, or picks **JOIN GAME** and types the code. Host is P1, guest is P2; each player picks their own fighter and both press Light to ready up.
+
+How it works: no game server is needed, so it runs on GitHub Pages. Browsers connect directly over WebRTC (PeerJS, loaded from unpkg; its free public broker is used only to introduce the two browsers). Only button states are exchanged and both browsers run the identical simulation (input-delay lockstep, 3 frames). Local controls are the usual keyboard (either layout) or a gamepad. Esc leaves the match.
+Limits: needs internet access to unpkg.com and 0.peerjs.com; a few strict corporate/school networks block WebRTC (no TURN relay is configured). Gameplay slows if the connection stalls rather than desyncing.
+
+## v1.3: mobile / touch
+On phones and tablets (touch screens) on-screen controls appear automatically: D-pad on the left (up = jump, down = crouch), PUNCH / KICK / SPEC / BLOCK on the right, MENU (= Esc) at the bottom centre. Hold DOWN + BLOCK to crouch-block, DOWN + PUNCH/KICK for low attacks, like on keyboard. Play in landscape. Touch controls drive player 1, so use them for CPU matches and online play (one phone cannot do local two-player). Tap menu items directly or use the D-pad + PUNCH to confirm.
